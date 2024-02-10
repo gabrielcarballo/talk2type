@@ -14,8 +14,8 @@ export const NewNoteCard = () => {
         <Dialog.Overlay className='inset-0 fixed bg-black/60'>
           <Dialog.Content className='fixed overflow-hidden left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[640px] h-[60vh] w-full bg-slate-700 rounded-md flex flex-col outline-none'>
             <div className="flex flex-1 flex-col gap-3 p-5">
-              <span className='text-sm font-medium text-slate-300'>d</span>
-              <p className='text-sm leading-6 text-slate-400'>Start <button className='text-lime-400 hover:underline font-medium'>recording a note</button> or <button className='text-lime-400 hover:underline font-medium'>use text</button> just  if you like</p>
+              <span className='text-sm font-medium text-slate-300'>Add Note</span>
+              <p className='text-sm leading-6 text-slate-400'>Start <button className='text-lime-400 hover:underline font-medium'>recording a note</button> or <button className='text-lime-400 hover:underline font-medium'>use text</button> if you like</p>
             </div>
             <button
               className='w-full bg-lime-400 py-4 text-center text-sm text-slate-300 outline-none font-medium group hover:bg-lime-500'
