@@ -4,21 +4,18 @@ import { useState, ChangeEvent, FormEvent } from 'react'
 import { toast } from 'sonner'
 
 interface NewNoteCardProps {
-  onNoteCreated: (newNote: NoteCardProps) => void;  
+  onNoteCreated: (newNote: NoteCardProps) => void;
 }
-
 
 type NoteCardProps = {
   title: string;
   content: string;
 }
 
-
 let recognition: SpeechRecognition | null = null;
 
 export const NewNoteCard = ({ onNoteCreated }: NewNoteCardProps) => {
   const initialContent = { title: '', content: '' }
-
 
   const [shouldShowOnboarding, setShouldShowOnboarding] = useState(true);
   const [noteContent, setNoteContent] = useState(initialContent);
@@ -100,7 +97,7 @@ export const NewNoteCard = ({ onNoteCreated }: NewNoteCardProps) => {
           <Dialog.Content className='fixed overflow-hidden inset-0 md:inset-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:max-w-[640px] md:h-[60vh] w-full bg-slate-700 md:rounded-md flex flex-col outline-none'>
 
             <Dialog.Close className='absolute top-5 right-5 text-slate-300 hover:text-slate-100'>
-              <X className='size-5 hover:text-slate-100' onClick={resetNotes}/>
+              <X className='size-5 hover:text-slate-100' onClick={resetNotes} />
             </Dialog.Close>
             <form className='flex-1 flex flex-col'>
               <div className="flex flex-1 flex-col gap-3 p-5">
@@ -108,8 +105,8 @@ export const NewNoteCard = ({ onNoteCreated }: NewNoteCardProps) => {
                 {shouldShowOnboarding ?
                   <p className='text-sm leading-6 text-slate-400'>Start <button type='button' className='text-lime-400 hover:underline font-medium' onClick={handleStartRecording}>recording a note</button> or <button type='button' className='text-lime-400 hover:underline font-medium' onClick={handleStart}>use text</button> if you like</p> :
                   <>
-                  <textarea placeholder='Add Title' value={noteContent.title} onChange={handleTitleChange} className='text-2xl leading-6 text-slate-100 bg-transparent h-auto flex  resize-none outline-none' />
-                  <textarea autoFocus className='text-sm leading-6 text-slate-400 bg-transparent resize-none flex-1 outline-none' placeholder='Type your note here...' onChange={handleContent} value={noteContent.content} />
+                    <textarea placeholder='Add Title' value={noteContent.title} onChange={handleTitleChange} className='text-2xl leading-6 text-slate-100 bg-transparent h-auto flex  resize-none outline-none' />
+                    <textarea autoFocus className='text-sm leading-6 text-slate-400 bg-transparent resize-none flex-1 outline-none' placeholder='Type your note here...' onChange={handleContent} value={noteContent.content} />
                   </>}
               </div>
               {isRecording ? (

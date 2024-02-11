@@ -40,7 +40,7 @@ export const NoteCard = ({ note, onNoteDeleted }: NoteCardProps) => {
               <span className="text-red-400 group-hover:underline" onClick={() => onNoteDeleted(note.id)}>Delete this note?</span>
             </button>
             <Dialog.Close className='absolute top-5 right-5 text-slate-300 hover:text-slate-100'>
-              <X className='size-5 hover:text-slate-100'/>
+              <X className='size-5 hover:text-slate-100' />
             </Dialog.Close>
           </Dialog.Content>
         </Dialog.Overlay>

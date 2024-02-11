@@ -55,11 +55,10 @@ export function App() {
 
       </form>
       <div className='h-px bg-slate-700' />
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[250px]">
         <NewNoteCard onNoteCreated={onNoteCreated} />
         {filteredNotes.map((note) => (
-          <NoteCard key={note.id} note={note} onNoteDeleted={onNoteDeleted}/>
+          <NoteCard key={note.id} note={note} onNoteDeleted={onNoteDeleted} />
         ))}
       </div>
     </div>
