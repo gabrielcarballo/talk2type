@@ -65,7 +65,6 @@ export const NewNoteCard = ({ onNoteCreated }: NewNoteCardProps) => {
     setIsRecording(false);
     if (content !== '') toast.info('Recording stopped! 🛑');
     recognition?.stop();
-    setShouldShowOnboarding(true);
     setContent(content);
 
   }
