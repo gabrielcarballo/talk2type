@@ -7,9 +7,12 @@ interface NewNoteCardProps {
   onNoteCreated: (newNote: string) => void;
 }
 
+let recognition: SpeechRecognition | null = null;
+
 export const NewNoteCard = ({ onNoteCreated }: NewNoteCardProps) => {
   const [shouldShowOnboarding, setShouldShowOnboarding] = useState(true);
   const [content, setContent] = useState('');
+  const [isRecording, setIsRecording] = useState(false);
 
   const handleStart = () => {
     setShouldShowOnboarding(false);
@@ -22,10 +25,49 @@ export const NewNoteCard = ({ onNoteCreated }: NewNoteCardProps) => {
 
   const handleSavedNote = (e: FormEvent) => {
     e.preventDefault();
-    content.length === 0 ? toast.error('You forgot to add your note, SpongeBob!') : toast.success('Yay! Note saved! 🎉');
+    if (shouldShowOnboarding || content === '') return toast.error('You forgot to add your note, SpongeBob!')
+    toast.success('Yay! Note saved! 🎉');
     onNoteCreated(content);
-    setContent('');
     setShouldShowOnboarding(true);
+    setContent('');
+  }
+
+  const handleStartRecording = () => {
+    const isSpeechRecognitionAvailable = 'SpeechRecognition' in window || 'webkitSpeechRecognition' in window;
+    if (!isSpeechRecognitionAvailable) {
+      toast.error('Speech recognition is not available in your browser. Please use Chrome or Edge.')
+      setIsRecording(false);
+      return;
+    }
+    isRecording ? toast.info('Calm down, bro. It is recording') : toast.info('Recording started! 🎙️');
+    setIsRecording(true);
+    setShouldShowOnboarding(false);
+
+    recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = 'pt-BR';
+    recognition.continuous = true;
+    recognition.maxAlternatives = 1;
+    recognition.interimResults = true;
+    recognition.onresult = (event) => {
+      const transcription = Array.from(event.results).reduce((text, result) => {
+        return text.concat(result[0].transcript)
+      }, '')
+      setContent(transcription);
+    }
+
+    recognition.onerror = (event) => {
+      console.error(event.error)
+    }
+    recognition.start();
+  }
+
+  const handleStopRecording = () => {
+    setIsRecording(false);
+    if (content !== '') toast.info('Recording stopped! 🛑');
+    recognition?.stop();
+    setShouldShowOnboarding(true);
+    setContent(content);
+
   }
   return (
     <Dialog.Root>
@@ -41,18 +83,32 @@ export const NewNoteCard = ({ onNoteCreated }: NewNoteCardProps) => {
             <Dialog.Close className='absolute top-5 right-5 text-slate-300 hover:text-slate-100'>
               <X className='size-5 hover:text-slate-100' />
             </Dialog.Close>
-            <form onSubmit={handleSavedNote} className='flex-1 flex flex-col'>
+            <form className='flex-1 flex flex-col'>
               <div className="flex flex-1 flex-col gap-3 p-5">
                 <span className='text-sm font-medium text-slate-300'>Add Note</span>
                 {shouldShowOnboarding ?
-                  <p className='text-sm leading-6 text-slate-400'>Start <button className='text-lime-400 hover:underline font-medium' onClick={handleStart}>recording a note</button> or <button className='text-lime-400 hover:underline font-medium' onClick={handleStart}>use text</button> if you like</p> :
-                  <textarea autoFocus className='text-sm leading-6 text-slate-400 bg-transparent resize-none flex-1 outline-none' placeholder='Type your note here...' onChange={handleContent} value={content}/>}
+                  <p className='text-sm leading-6 text-slate-400'>Start <button type='button' className='text-lime-400 hover:underline font-medium' onClick={handleStartRecording}>recording a note</button> or <button type='button' className='text-lime-400 hover:underline font-medium' onClick={handleStart}>use text</button> if you like</p> :
+                  <textarea autoFocus className='text-sm leading-6 text-slate-400 bg-transparent resize-none flex-1 outline-none' placeholder='Type your note here...' onChange={handleContent} value={content} />}
               </div>
-              <button
-                className='w-full bg-lime-400 py-4 text-center text-sm text-slate-300 outline-none font-medium group hover:bg-lime-500'
-                type="submit">
-                <span className="text-lime-950 group-hover:underline">Save note</span>
-              </button>
+              {isRecording ? (
+                <button
+                  className='w-full bg-slate-900 py-4 flex justify-center items-center gap-2 text-center text-sm text-slate-300 outline-none font-medium group hover:text-red-500'
+                  type="button"
+                  onClick={handleStopRecording}
+                >
+                  <div className="size-3 rounded-full bg-red-500 animate-pulse" />
+                  <span className="group-hover:underline">
+                    Recording... Click to stop</span>
+                </button>
+              ) : (
+                <button
+                  className='w-full bg-lime-400 py-4 text-center text-sm text-slate-300 outline-none font-medium group hover:bg-lime-500'
+                  type="button"
+                  onClick={handleSavedNote}
+                >
+                  <span className="text-lime-950 group-hover:underline">Save note</span>
+                </button>
+              )}
             </form>
           </Dialog.Content>
         </Dialog.Overlay>
