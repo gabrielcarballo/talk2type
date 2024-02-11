@@ -2,6 +2,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { X } from 'lucide-react'
 import { useState, ChangeEvent, FormEvent } from 'react'
 import { toast } from 'sonner'
+import { LanguageSelector } from './LanguageSelector';
 
 interface NewNoteCardProps {
   onNoteCreated: (newNote: NoteCardProps) => void;
@@ -10,15 +11,18 @@ interface NewNoteCardProps {
 type NoteCardProps = {
   title: string;
   content: string;
+  language: LanguageOptions;
 }
+
+type LanguageOptions = 'pt-BR' | 'en-US' | 'es-ES' | 'fr-FR' | 'de-DE';
 
 let recognition: SpeechRecognition | null = null;
 
 export const NewNoteCard = ({ onNoteCreated }: NewNoteCardProps) => {
-  const initialContent = { title: '', content: '' }
+  const initialContent: NoteCardProps = { title: '', content: '', language: 'pt-BR' };
 
   const [shouldShowOnboarding, setShouldShowOnboarding] = useState(true);
-  const [noteContent, setNoteContent] = useState(initialContent);
+  const [noteContent, setNoteContent] = useState<NoteCardProps>(initialContent);
   const [isRecording, setIsRecording] = useState(false);
 
 
@@ -61,7 +65,7 @@ export const NewNoteCard = ({ onNoteCreated }: NewNoteCardProps) => {
     setShouldShowOnboarding(false);
 
     recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-    recognition.lang = 'pt-BR';
+    recognition.lang = noteContent.language;
     recognition.continuous = true;
     recognition.maxAlternatives = 1;
     recognition.interimResults = true;
@@ -85,6 +89,13 @@ export const NewNoteCard = ({ onNoteCreated }: NewNoteCardProps) => {
     setNoteContent({ ...noteContent, content: noteContent.content });
 
   }
+
+  const handleLanguageChange = (language: string) => {
+    setNoteContent({ ...noteContent, language: language as LanguageOptions });
+    console.log(noteContent.language);
+  }
+
+
   return (
     <Dialog.Root>
       <Dialog.Trigger className="rounded-md flex flex-col bg-slate-700 p-5 gap-y-3 text-left overflow-hidden relative hover:ring-2 outline-none hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400">
@@ -103,7 +114,10 @@ export const NewNoteCard = ({ onNoteCreated }: NewNoteCardProps) => {
               <div className="flex flex-1 flex-col gap-3 p-5">
                 <span className='text-sm font-medium text-slate-300'>Add Note</span>
                 {shouldShowOnboarding ?
-                  <p className='text-sm leading-6 text-slate-400'>Start <button type='button' className='text-lime-400 hover:underline font-medium' onClick={handleStartRecording}>recording a note</button> or <button type='button' className='text-lime-400 hover:underline font-medium' onClick={handleStart}>use text</button> if you like</p> :
+                <div>
+                  <p className='text-sm leading-6 text-slate-400'>Start <button type='button' className='text-lime-400 hover:underline font-medium' onClick={handleStartRecording}>recording a note</button> or <button type='button' className='text-lime-400 hover:underline font-medium' onClick={handleStart}>use text</button> if you like</p>
+                  <LanguageSelector onLanguageChange={handleLanguageChange}/>
+                </div> :
                   <>
                     <textarea placeholder='Add Title' value={noteContent.title} onChange={handleTitleChange} className='text-2xl leading-6 text-slate-100 bg-transparent h-auto flex  resize-none outline-none' />
                     <textarea autoFocus className='text-sm leading-6 text-slate-400 bg-transparent resize-none flex-1 outline-none' placeholder='Type your note here...' onChange={handleContent} value={noteContent.content} />
