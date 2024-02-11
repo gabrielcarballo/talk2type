@@ -5,22 +5,28 @@ import { useState } from 'react';
 
 interface Note {
   id: string;
-  content: string;
+  noteContent: NoteCardProps;
   date: Date;
+}
+
+type NoteCardProps = {
+  title: string;
+  content: string;
 }
 
 export function App() {
   const [notes, setNotes] = useState<Note[]>(localStorage.getItem('notes') ? JSON.parse(localStorage.getItem('notes') as string) : []);
   const [search, setSearch] = useState('');
 
-  const onNoteCreated = (content: string) => {
+  const onNoteCreated = (noteContent: NoteCardProps) => {
     const newNote: Note = {
       id: crypto.randomUUID(),
-      content,
+      noteContent,
       date: new Date()
     }
-
+    console.log(newNote);
     const newNotesArray = [newNote, ...notes];
+    console.log(newNotesArray);
     setNotes(newNotesArray);
     localStorage.setItem('notes', JSON.stringify(newNotesArray));
   }
@@ -34,7 +40,7 @@ export function App() {
     setNotes(newNotesArray);
     localStorage.setItem('notes', JSON.stringify(newNotesArray));
   }
-  const filteredNotes = search !== '' ? notes.filter((note) => note.content.toLowerCase().includes(search.toLowerCase())) : notes;
+  const filteredNotes = search !== '' ? notes.filter((note) => note.noteContent.content.toLowerCase().includes(search.toLowerCase())) : notes;
 
   return (
     <div className="mx-auto max-w-6xl my-12 space-y-6 px-5">

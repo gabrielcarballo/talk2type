@@ -6,10 +6,15 @@ interface NoteCardProps {
   note:
   {
     id: string;
-    content: string;
+    noteContent: NoteContent;
     date: Date;
   }
   onNoteDeleted: (id: string) => void;
+}
+
+type NoteContent = {
+  title: string;
+  content: string;
 }
 
 export const NoteCard = ({ note, onNoteDeleted }: NoteCardProps) => {
@@ -17,7 +22,8 @@ export const NoteCard = ({ note, onNoteDeleted }: NoteCardProps) => {
     <Dialog.Root>
       <Dialog.Trigger className="rounded-md text-left flex flex-col bg-slate-800 p-5 gap-3 overflow-hidden relative hover:ring-2 outline-none hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400">
         <span className='text-sm font-medium text-slate-300'>{formatDistanceToNow(note.date, { addSuffix: true })} </span>
-        <p className='text-sm leading-6 text-slate-400'>{note.content}</p>
+        <p className='text-sm leading-6 text-slate-400'>{note.noteContent?.title}</p>
+        <p className='text-sm leading-6 text-slate-400'>{note.noteContent?.content}</p>
         <div className="absolute bottom-0 right-0 left-0 h-1/2 bg-gradient-to-t from-black/60 to-black/0 pointer-events-none" />
       </Dialog.Trigger>
       <Dialog.Portal>
@@ -25,7 +31,8 @@ export const NoteCard = ({ note, onNoteDeleted }: NoteCardProps) => {
           <Dialog.Content className='fixed inset-0 md:inset-auto overflow-hidden md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:max-w-[640px] md:h-[60vh] w-full bg-slate-700 md:rounded-md flex flex-col outline-none'>
             <div className="flex flex-1 flex-col gap-3 p-5">
               <span className='text-sm font-medium text-slate-300'>{formatDistanceToNow(note.date, { addSuffix: true })}</span>
-              <p className='text-sm leading-6 text-slate-400'>{note.content}</p>
+              <p className='text-sm leading-6 text-slate-400'>{note.noteContent?.title}</p>
+              <p className='text-sm leading-6 text-slate-400'>{note.noteContent?.content}</p>
             </div>
             <button
               className='w-full bg-slate-800 py-4 text-center text-sm text-slate-300 outline-none font-medium group'

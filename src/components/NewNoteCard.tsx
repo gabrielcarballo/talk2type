@@ -4,32 +4,52 @@ import { useState, ChangeEvent, FormEvent } from 'react'
 import { toast } from 'sonner'
 
 interface NewNoteCardProps {
-  onNoteCreated: (newNote: string) => void;
+  onNoteCreated: (newNote: NoteCardProps) => void;  
 }
+
+
+type NoteCardProps = {
+  title: string;
+  content: string;
+}
+
 
 let recognition: SpeechRecognition | null = null;
 
 export const NewNoteCard = ({ onNoteCreated }: NewNoteCardProps) => {
+  const initialContent = { title: '', content: '' }
+
+
   const [shouldShowOnboarding, setShouldShowOnboarding] = useState(true);
-  const [content, setContent] = useState('');
+  const [noteContent, setNoteContent] = useState(initialContent);
   const [isRecording, setIsRecording] = useState(false);
+
 
   const handleStart = () => {
     setShouldShowOnboarding(false);
   }
 
   const handleContent = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setContent(e.target.value);
+    setNoteContent({ ...noteContent, content: e.target.value });
     e.target.textLength === 0 ? setShouldShowOnboarding(true) : null;
+  }
+
+  const handleTitleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setNoteContent({ ...noteContent, title: e.target.value });
   }
 
   const handleSavedNote = (e: FormEvent) => {
     e.preventDefault();
-    if (shouldShowOnboarding || content === '') return toast.error('You forgot to add your note, SpongeBob!')
+    if (shouldShowOnboarding || noteContent.content === '') return toast.error('You forgot to add your note, SpongeBob!')
     toast.success('Yay! Note saved! 🎉');
-    onNoteCreated(content);
+    onNoteCreated(noteContent);
     setShouldShowOnboarding(true);
-    setContent('');
+    setNoteContent(initialContent);
+  }
+
+  const resetNotes = () => {
+    setShouldShowOnboarding(true);
+    setNoteContent(initialContent);
   }
 
   const handleStartRecording = () => {
@@ -52,7 +72,7 @@ export const NewNoteCard = ({ onNoteCreated }: NewNoteCardProps) => {
       const transcription = Array.from(event.results).reduce((text, result) => {
         return text.concat(result[0].transcript)
       }, '')
-      setContent(transcription);
+      setNoteContent({ ...noteContent, content: transcription });
     }
 
     recognition.onerror = (event) => {
@@ -63,9 +83,9 @@ export const NewNoteCard = ({ onNoteCreated }: NewNoteCardProps) => {
 
   const handleStopRecording = () => {
     setIsRecording(false);
-    if (content !== '') toast.info('Recording stopped! 🛑');
+    if (noteContent.content !== '') toast.info('Recording stopped! 🛑');
     recognition?.stop();
-    setContent(content);
+    setNoteContent({ ...noteContent, content: noteContent.content });
 
   }
   return (
@@ -80,14 +100,17 @@ export const NewNoteCard = ({ onNoteCreated }: NewNoteCardProps) => {
           <Dialog.Content className='fixed overflow-hidden inset-0 md:inset-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:max-w-[640px] md:h-[60vh] w-full bg-slate-700 md:rounded-md flex flex-col outline-none'>
 
             <Dialog.Close className='absolute top-5 right-5 text-slate-300 hover:text-slate-100'>
-              <X className='size-5 hover:text-slate-100' />
+              <X className='size-5 hover:text-slate-100' onClick={resetNotes}/>
             </Dialog.Close>
             <form className='flex-1 flex flex-col'>
               <div className="flex flex-1 flex-col gap-3 p-5">
                 <span className='text-sm font-medium text-slate-300'>Add Note</span>
                 {shouldShowOnboarding ?
                   <p className='text-sm leading-6 text-slate-400'>Start <button type='button' className='text-lime-400 hover:underline font-medium' onClick={handleStartRecording}>recording a note</button> or <button type='button' className='text-lime-400 hover:underline font-medium' onClick={handleStart}>use text</button> if you like</p> :
-                  <textarea autoFocus className='text-sm leading-6 text-slate-400 bg-transparent resize-none flex-1 outline-none' placeholder='Type your note here...' onChange={handleContent} value={content} />}
+                  <>
+                  <textarea placeholder='Add Title' value={noteContent.title} onChange={handleTitleChange} className='text-2xl leading-6 text-slate-100 bg-transparent h-auto flex  resize-none outline-none' />
+                  <textarea autoFocus className='text-sm leading-6 text-slate-400 bg-transparent resize-none flex-1 outline-none' placeholder='Type your note here...' onChange={handleContent} value={noteContent.content} />
+                  </>}
               </div>
               {isRecording ? (
                 <button
