@@ -3,7 +3,11 @@ import { X } from 'lucide-react'
 import { useState, ChangeEvent, FormEvent } from 'react'
 import { toast } from 'sonner'
 
-export const NewNoteCard = () => {
+interface NewNoteCardProps {
+  onNoteCreated: (newNote: string) => void;
+}
+
+export const NewNoteCard = ({ onNoteCreated }: NewNoteCardProps) => {
   const [shouldShowOnboarding, setShouldShowOnboarding] = useState(true);
   const [content, setContent] = useState('');
 
@@ -19,7 +23,9 @@ export const NewNoteCard = () => {
   const handleSavedNote = (e: FormEvent) => {
     e.preventDefault();
     content.length === 0 ? toast.error('You forgot to add your note, SpongeBob!') : toast.success('Yay! Note saved! 🎉');
-    console.log(content);
+    onNoteCreated(content);
+    setContent('');
+    setShouldShowOnboarding(true);
   }
   return (
     <Dialog.Root>
@@ -40,7 +46,7 @@ export const NewNoteCard = () => {
                 <span className='text-sm font-medium text-slate-300'>Add Note</span>
                 {shouldShowOnboarding ?
                   <p className='text-sm leading-6 text-slate-400'>Start <button className='text-lime-400 hover:underline font-medium' onClick={handleStart}>recording a note</button> or <button className='text-lime-400 hover:underline font-medium' onClick={handleStart}>use text</button> if you like</p> :
-                  <textarea autoFocus className='text-sm leading-6 text-slate-400 bg-transparent resize-none flex-1 outline-none' placeholder='Type your note here...' onChange={handleContent} />}
+                  <textarea autoFocus className='text-sm leading-6 text-slate-400 bg-transparent resize-none flex-1 outline-none' placeholder='Type your note here...' onChange={handleContent} value={content}/>}
               </div>
               <button
                 className='w-full bg-lime-400 py-4 text-center text-sm text-slate-300 outline-none font-medium group hover:bg-lime-500'
