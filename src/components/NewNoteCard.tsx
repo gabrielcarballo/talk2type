@@ -99,7 +99,7 @@ export const NewNoteCard = ({ onNoteCreated }: NewNoteCardProps) => {
 
   return (
     <Dialog.Root>
-      <Dialog.Trigger className="rounded-md flex flex-col items-center justify-start bg-slate-700 p-5 gap-y-3 text-left overflow-hidden relative hover:ring-2 outline-none hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400">
+      <Dialog.Trigger className="rounded-xl flex flex-col items-center justify-start bg-slate-700 p-5 gap-y-3 text-left overflow-hidden relative hover:ring-2 outline-none hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400">
         <span className='text-2xl font-medium text-slate-200'>Add Note</span>
         <FilePlusIcon className='size-20 text-slate-50 absolute top-[40%]' />
         <div className="absolute bottom-0 right-0 left-0 h-1/2 bg-gradient-to-t from-black/60 to-black/0 pointer-events-none" />
@@ -107,12 +107,11 @@ export const NewNoteCard = ({ onNoteCreated }: NewNoteCardProps) => {
       <Dialog.Portal>
         <Dialog.Overlay className='inset-0 fixed bg-black/60'>
           <Dialog.Content className='fixed overflow-hidden inset-0 md:inset-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:max-w-[640px] md:h-[60vh] w-full bg-slate-700 md:rounded-md flex flex-col outline-none'>
-
             <Dialog.Close className='absolute top-5 right-5 text-slate-300 hover:text-slate-100'>
               <X className='size-6 hover:text-slate-100' onClick={resetNotes} />
             </Dialog.Close>
             <form className='flex-1 flex flex-col'>
-              <div className="flex flex-1 flex-col gap-3 p-5">
+              <div className=" flex flex-1 flex-col gap-3 p-5">
                 {shouldShowOnboarding ?
                   <>
                     <span className='text-lg font-medium text-slate-300'>Add Note</span>
