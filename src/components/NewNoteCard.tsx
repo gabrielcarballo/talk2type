@@ -3,6 +3,8 @@ import { X } from 'lucide-react'
 import { useState, ChangeEvent, FormEvent } from 'react'
 import { toast } from 'sonner'
 import { LanguageSelector } from './LanguageSelector';
+// import { AvatarSymbol } from './AvatarSymbol';
+import { FilePlusIcon } from '@radix-ui/react-icons'
 
 interface NewNoteCardProps {
   onNoteCreated: (newNote: NoteCardProps) => void;
@@ -97,9 +99,9 @@ export const NewNoteCard = ({ onNoteCreated }: NewNoteCardProps) => {
 
   return (
     <Dialog.Root>
-      <Dialog.Trigger className="rounded-md flex flex-col bg-slate-700 p-5 gap-y-3 text-left overflow-hidden relative hover:ring-2 outline-none hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400">
-        <span className='text-sm font-medium text-slate-200'>Add Note</span>
-        <p className='text-sm leading-6 text-slate-400'>Start recording to convert to text</p>
+      <Dialog.Trigger className="rounded-md flex flex-col items-center justify-start bg-slate-700 p-5 gap-y-3 text-left overflow-hidden relative hover:ring-2 outline-none hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400">
+        <span className='text-2xl font-medium text-slate-200'>Add Note</span>
+        <FilePlusIcon className='size-20 text-slate-50 absolute top-[40%]' />
         <div className="absolute bottom-0 right-0 left-0 h-1/2 bg-gradient-to-t from-black/60 to-black/0 pointer-events-none" />
       </Dialog.Trigger>
       <Dialog.Portal>
@@ -122,7 +124,7 @@ export const NewNoteCard = ({ onNoteCreated }: NewNoteCardProps) => {
                   :
                   <>
                     <textarea placeholder='Add Title' value={noteContent.title} onChange={handleTitleChange} className='text-2xl leading-6 text-slate-100 bg-transparent h-auto flex  resize-none outline-none' />
-                    <textarea autoFocus className='text-sm leading-6 text-slate-400 bg-transparent resize-none flex-1 outline-none' placeholder='Type your note here or just start speaking' onChange={handleContent} value={noteContent.content} />
+                    <textarea autoFocus className='text-sm leading-6 text-slate-400 bg-transparent resize-none flex-1 outline-none' placeholder="Type your note here or just start speaking. Don't worry, you can add your title later." onChange={handleContent} value={noteContent.content} />
                   </>}
               </div>
               {isRecording ? (
