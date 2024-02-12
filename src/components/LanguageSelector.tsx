@@ -23,11 +23,11 @@ export const LanguageSelector = ({ onLanguageChange }: LanguageSelectorProps) =>
       </SelectTrigger>
       <SelectContent className='text-slate-200'>
         <SelectGroup>
-          <SelectItem value="pt-BR">Português</SelectItem>
+          <SelectItem className='focus:bg-slate-900' value="pt-BR">Português</SelectItem>
           <SelectSeparator />
-          <SelectItem value="en-US">English</SelectItem>
+          <SelectItem className='focus:bg-slate-900' value="en-US">English</SelectItem>
           <SelectSeparator />
-          <SelectItem value="es-ES">Español</SelectItem>
+          <SelectItem className='focus:bg-slate-900' value="es-ES">Español</SelectItem>
           <SelectSeparator />
         </SelectGroup>
         <SelectScrollUpButton />

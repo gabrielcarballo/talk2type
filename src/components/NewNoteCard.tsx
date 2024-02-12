@@ -122,7 +122,7 @@ export const NewNoteCard = ({ onNoteCreated }: NewNoteCardProps) => {
                   :
                   <>
                     <textarea placeholder='Add Title' value={noteContent.title} onChange={handleTitleChange} className='text-2xl leading-6 text-slate-100 bg-transparent h-auto flex  resize-none outline-none' />
-                    <textarea autoFocus className='text-sm leading-6 text-slate-400 bg-transparent resize-none flex-1 outline-none' placeholder='Type your note here...' onChange={handleContent} value={noteContent.content} />
+                    <textarea autoFocus className='text-sm leading-6 text-slate-400 bg-transparent resize-none flex-1 outline-none' placeholder='Type your note here or just start speaking' onChange={handleContent} value={noteContent.content} />
                   </>}
               </div>
               {isRecording ? (
