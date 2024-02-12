@@ -15,11 +15,11 @@ interface LanguageSelectorProps {
   onLanguageChange: (language: string) => void;
 }
 
-export const LanguageSelector = ({ onLanguageChange }: LanguageSelectorProps) => { 
+export const LanguageSelector = ({ onLanguageChange }: LanguageSelectorProps) => {
   return (
     <Select onValueChange={onLanguageChange}>
       <SelectTrigger className='h-6 w-1/5 text-slate-200'>
-        <SelectValue placeholder='Language'/>
+        <SelectValue placeholder='Language' />
       </SelectTrigger>
       <SelectContent className='text-slate-200'>
         <SelectGroup>
