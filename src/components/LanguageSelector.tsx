@@ -18,14 +18,14 @@ interface LanguageSelectorProps {
 export const LanguageSelector = ({ onLanguageChange }: LanguageSelectorProps) => { 
   return (
     <Select onValueChange={onLanguageChange}>
-      <SelectTrigger>
+      <SelectTrigger className='h-6 w-1/5 text-slate-200'>
         <SelectValue placeholder='Language'/>
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className='text-slate-200'>
         <SelectGroup>
-          <SelectItem value="en-US">English</SelectItem>
-          <SelectSeparator />
           <SelectItem value="pt-BR">Português</SelectItem>
+          <SelectSeparator />
+          <SelectItem value="en-US">English</SelectItem>
           <SelectSeparator />
           <SelectItem value="es-ES">Español</SelectItem>
           <SelectSeparator />
